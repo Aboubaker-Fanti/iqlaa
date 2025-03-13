@@ -46,7 +46,6 @@ function AnalyticsDashboard() {
       .then((res) => {
         if (!res.ok) {
           // Handle unauthorized access (e.g., token might be invalid or expired)
-          console.error('Unauthorized access. Please log in again.');
           router.push('/adminlogin'); 
         }
         return res.json();
@@ -56,7 +55,6 @@ function AnalyticsDashboard() {
         setCounters(data);
       })
       .catch((err) => {
-        console.error('Error fetching data:', err);
         router.push('/adminlogin'); 
       });  }, []);
 
