@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Send success response with admin details (You can send a JWT token instead)
       res.status(200).json({ message: 'Authentication successful', admin });
-    } catch (error) {
+    } catch {
       res.status(401).json({ error:  'Authentication failed'});
     }
   } else {
