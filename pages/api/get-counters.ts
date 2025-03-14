@@ -26,6 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // Verify the token
     const decoded = jwt.verify(token, SECRET_KEY);
+    console.log('Decoded token:', decoded);
+
 
     // Fetch counters from the database
     const counters = await prisma.counter.findUnique({
