@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
+const jwt = require("jsonwebtoken");
 
-// Secret key for JWT
 const SECRET_KEY = process.env.JWT_SECRET || 'supersecretkey';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,14 +9,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const token = req.headers.authorization?.split(' ')[1]; // Bearer Token
+  const token = req.headers.authorization?.split(' ')[1]; 
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: No token provided' });
   }
 
   try {
-    // Verify JWT token
     const decoded = jwt.verify(token, SECRET_KEY) as { id: string; role: string };
 
     if (decoded.role !== 'admin') {
