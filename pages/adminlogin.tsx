@@ -32,7 +32,7 @@ const Adminlogin: React.FC = () => {
       } else {
         setError(data.error || 'Invalid credentials');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     }
   };
