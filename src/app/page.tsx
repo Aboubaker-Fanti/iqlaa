@@ -23,8 +23,6 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
   finish_pool: 0,
 });
 
-
-
 useEffect(() => {
   const fetchData = async () => {
     const result = await getIqlaaData();
@@ -33,13 +31,10 @@ useEffect(() => {
       localStorage.setItem("key","done");
       await updateIqlaaData({ visites: result.visites + 1});
      //  fetch('/api/increment-visit', { method: 'POST' });
-      
-    }
-          // setLoading(false);
-    };
-    
 
-    
+    }
+    };
+
     const questionSet = language === 'en' ? allQuestions : allQuestionsAr;
     const shuffled = [...questionSet].sort(() => 0.5 - Math.random());
     setQuestions(shuffled.slice(0, 20));
@@ -60,7 +55,6 @@ useEffect(() => {
 
   const increment_finished = async () => {
     await updateIqlaaData({finish_pool: data.finish_pool + 1 });
-
         // fetch('/api/increment-finish-poll', { method: 'POST' });
 
   };

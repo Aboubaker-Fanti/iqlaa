@@ -1,5 +1,5 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "./firebase"; // ✅ Ensure this imports Firestore correctly
+import { db } from "./firebase";
 
 export async function getIqlaaData() {
   try {

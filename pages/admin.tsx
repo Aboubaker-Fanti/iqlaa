@@ -1,22 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getIqlaaData } from "./api/filestore"; // ✅ Correct file name
+import { getIqlaaData } from "./api/filestore"; 
 
-import './AnalyticsDashboard.css'; // Ensure this file exists
+import './AnalyticsDashboard.css'; 
 import { useRouter } from 'next/router';
-
-// Define the props type
-// type CountersType = {
-//   visits: number;
-//   startedPoll: number;
-//   finishedPoll: number;
-// };
-
-// const [data, setData] = useState<any>(null);
-// const [data, setData] = useState<number | null>(null); // If you want an integer, set it to `number | null`
-// const [loading, setLoading] = useState(true);
-
-
-
 
 function AnalyticsDashboard() {
 // const [data, setData] = useState<any>(null);
@@ -27,7 +13,6 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
 });
 
 const router = useRouter();
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +30,7 @@ const router = useRouter();
 
 
     fetchData();
-  }, [router]); // Ensure `router` is included in dependencies
+  }, [router]); 
 
   return (
     <div className="dashboard-container">
