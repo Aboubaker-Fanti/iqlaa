@@ -1,23 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import { getIqlaaData } from "./api/filestore"; // ✅ Correct file name
+
 import './AnalyticsDashboard.css'; // Ensure this file exists
 import { useRouter } from 'next/router';
 
 // Define the props type
-type CountersType = {
-  visits: number;
-  startedPoll: number;
-  finishedPoll: number;
-};
+// type CountersType = {
+//   visits: number;
+//   startedPoll: number;
+//   finishedPoll: number;
+// };
+
+// const [data, setData] = useState<any>(null);
+// const [data, setData] = useState<number | null>(null); // If you want an integer, set it to `number | null`
+// const [loading, setLoading] = useState(true);
+
+
+
 
 function AnalyticsDashboard() {
-  const router = useRouter();
-  const [counters, setCounters] = useState<CountersType>({
-    visits: 0,
-    startedPoll: 0,
-    finishedPoll: 0,
-  });
+// const [data, setData] = useState<any>(null);
+const [data, setData] = useState<{ visites: number; start_pool: number; finish_pool: number }>({
+  visites: 0,
+  start_pool: 0,
+  finish_pool: 0,
+});
+
+const router = useRouter();
+
 
   useEffect(() => {
+    const fetchData = async () => {
+      const result = await getIqlaaData();
+      setData(result);
+      // setLoading(false);
+    };
+
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -25,28 +43,6 @@ function AnalyticsDashboard() {
       return;
     }
 
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-
-    const fetchData = async () => {
-      try {
-        // Verify authentication
-        const authRes = await fetch('/api/auth/check', { method: 'GET', headers });
-        if (!authRes.ok) throw new Error('Authentication failed');
-
-        // Fetch analytics data
-        const res = await fetch('/api/get-counters', { headers });
-        if (!res.ok) throw new Error('Failed to fetch counters');
-
-        const data = await res.json();
-        setCounters(data);
-      } catch (error) {
-        console.error('Error:', error);
-        router.push('/adminlogin');
-      }
-    };
 
     fetchData();
   }, [router]); // Ensure `router` is included in dependencies
@@ -59,7 +55,7 @@ function AnalyticsDashboard() {
           <div className="card-content">
             <div className="card-info">
               <p className="card-label">Total Visitors</p>
-              <h2 className="card-value">{counters.visits}</h2>
+              <h2 className="card-value">{data.visites}</h2>
             </div>
             <div className="card-icon card-icon-blue">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -77,7 +73,7 @@ function AnalyticsDashboard() {
           <div className="card-content">
             <div className="card-info">
               <p className="card-label">Pool Started</p>
-              <h2 className="card-value">{counters.startedPoll}</h2>
+              <h2 className="card-value">{data.start_pool}</h2>
             </div>
             <div className="card-icon card-icon-green">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -92,7 +88,7 @@ function AnalyticsDashboard() {
           <div className="card-content">
             <div className="card-info">
               <p className="card-label">Pool Finished</p>
-              <h2 className="card-value">{counters.finishedPoll}</h2>
+              <h2 className="card-value">{data.finish_pool}</h2>
               <p className="card-subtext">Of Visitors Finish The Pool</p>
             </div>
             <div className="card-icon card-icon-purple">

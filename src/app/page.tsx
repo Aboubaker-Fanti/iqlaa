@@ -8,6 +8,7 @@ import { allQuestions } from './data/questions';
 import { allQuestionsAr } from './data/questionsAr';
 import { Question, Result } from './types';
 import { Cigarette } from 'lucide-react';
+import { getIqlaaData, updateIqlaaData } from "../../pages/api/filestore";
 
 function App() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -16,19 +17,33 @@ function App() {
   const [showResults, setShowResults] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
+const [data, setData] = useState<{ visites: number; start_pool: number; finish_pool: number }>({
+  visites: 0,
+  start_pool: 0,
+  finish_pool: 0,
+});
 
 
 
-  useEffect(() => {
-
+useEffect(() => {
+  const fetchData = async () => {
+    const result = await getIqlaaData();
+    setData(result);
     if (!localStorage.getItem("key")){
-       localStorage.setItem("key","done");
-       fetch('/api/increment-visit', { method: 'POST' });
-       
-     }
+      localStorage.setItem("key","done");
+      await updateIqlaaData({ visites: result.visites + 1});
+     //  fetch('/api/increment-visit', { method: 'POST' });
+      
+    }
+          // setLoading(false);
+    };
+    
+
+    
     const questionSet = language === 'en' ? allQuestions : allQuestionsAr;
     const shuffled = [...questionSet].sort(() => 0.5 - Math.random());
     setQuestions(shuffled.slice(0, 20));
+    fetchData();
   }, [language]);
 
   const handleAnswer = (value: number) => {
@@ -43,8 +58,10 @@ function App() {
     }
   };
 
-  const increment_finished = () => {
-        fetch('/api/increment-finish-poll', { method: 'POST' });
+  const increment_finished = async () => {
+    await updateIqlaaData({finish_pool: data.finish_pool + 1 });
+
+        // fetch('/api/increment-finish-poll', { method: 'POST' });
 
   };
   const calculateResult = (): Result => {
@@ -147,10 +164,12 @@ function App() {
     }
   };
 
-  const start_pool = () => {
-    console.log(`Starting pool`);
+  const start_pool = async () => {
+    await updateIqlaaData({start_pool: data.start_pool + 1 });
+
+    // console.log(`Starting pool`);
     setIsStarted(true);
-    fetch('/api/increment-start-poll', { method: 'POST' });
+    // fetch('/api/increment-start-poll', { method: 'POST' });
 
   };
 
