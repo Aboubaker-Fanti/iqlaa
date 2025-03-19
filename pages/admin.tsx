@@ -1,33 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { getIqlaaData } from "./api/filestore"; 
-
 import './AnalyticsDashboard.css'; 
 import { useRouter } from 'next/router';
 
 function AnalyticsDashboard() {
-// const [data, setData] = useState<any>(null);
-const [data, setData] = useState<{ visites: number; start_pool: number; finish_pool: number }>({
-  visites: 0,
-  start_pool: 0,
-  finish_pool: 0,
-});
+  const [data, setData] = useState<{ visites: number; start_pool: number; finish_pool: number }>({
+    visites: 0,
+    start_pool: 0,
+    finish_pool: 0,
+  });
 
-const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await getIqlaaData();
-      setData(result);
-      // setLoading(false);
+
+      // Ensure result is always an object with default values
+      if (result && typeof result === "object" && "visites" in result) {
+        setData({
+          visites: result.visites ?? 0,
+          start_pool: result.start_pool ?? 0,
+          finish_pool: result.finish_pool ?? 0,
+        });
+      } else {
+        setData({ visites: 0, start_pool: 0, finish_pool: 0 });
+      }
     };
 
     const token = localStorage.getItem('token');
-
     if (!token) {
       router.push('/adminlogin');
       return;
     }
-
 
     fetchData();
   }, [router]); 
@@ -53,7 +58,7 @@ const router = useRouter();
           </div>
         </div>
 
-        {/* Total Prompts Card */}
+        {/* Pool Started Card */}
         <div className="dashboard-card">
           <div className="card-content">
             <div className="card-info">
@@ -68,7 +73,7 @@ const router = useRouter();
           </div>
         </div>
 
-        {/* Conversion Rate Card */}
+        {/* Pool Finished Card */}
         <div className="dashboard-card">
           <div className="card-content">
             <div className="card-info">
