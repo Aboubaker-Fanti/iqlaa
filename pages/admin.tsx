@@ -9,9 +9,9 @@ function AnalyticsDashboard() {
     start_pool: 0,
     finish_pool: 0,
   });
-
+  
   const router = useRouter();
-
+  
   useEffect(() => {
     const fetchData = async () => {
       const result = await getIqlaaData();
@@ -20,16 +20,17 @@ function AnalyticsDashboard() {
       } else {
         setData({ visites: 0, start_pool: 0, finish_pool: 0 });
       }
-
+    };  // Added missing closing brace for fetchData function
+    
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/adminlogin');
       return;
     }
-
+    
     fetchData();
   }, [router]); 
-
+  
   return (
     <div className="dashboard-container">
       <div className="dashboard-content">
@@ -50,7 +51,6 @@ function AnalyticsDashboard() {
             </div>
           </div>
         </div>
-
         {/* Pool Started Card */}
         <div className="dashboard-card">
           <div className="card-content">
@@ -65,7 +65,6 @@ function AnalyticsDashboard() {
             </div>
           </div>
         </div>
-
         {/* Pool Finished Card */}
         <div className="dashboard-card">
           <div className="card-content">
