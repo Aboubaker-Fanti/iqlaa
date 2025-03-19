@@ -16,10 +16,11 @@ function AnalyticsDashboard() {
     const fetchData = async () => {
       const result = await getIqlaaData();
       if (result) {
-        setData(result);
+        setData(result as { visites: number; start_pool: number; finish_pool: number });
       } else {
         setData({ visites: 0, start_pool: 0, finish_pool: 0 });
       }
+
     };  // Added missing closing brace for fetchData function
     
     const token = localStorage.getItem('token');
