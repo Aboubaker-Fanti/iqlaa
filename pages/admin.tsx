@@ -15,22 +15,11 @@ function AnalyticsDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await getIqlaaData();
-      setData(
-        result && typeof result === "object"
-          ? (result as { visites: number; start_pool: number; finish_pool: number })
-          : { visites: 0, start_pool: 0, finish_pool: 0 }
-      );
-      // Ensure result is always an object with default values
-      // if (result && typeof result === "object" && "visites" in result) {
-      //   setData({
-      //     visites: result.visites ?? 0,
-      //     start_pool: result.start_pool ?? 0,
-      //     finish_pool: result.finish_pool ?? 0,
-      //   });
-      // } else {
-      //   setData({ visites: 0, start_pool: 0, finish_pool: 0 });
-      // }
-    };
+      if (result) {
+        setData(result);
+      } else {
+        setData({ visites: 0, start_pool: 0, finish_pool: 0 });
+      }
 
     const token = localStorage.getItem('token');
     if (!token) {
