@@ -15,7 +15,7 @@ function AnalyticsDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await getIqlaaData();
-setData(result ?? { visites: 0, start_pool: 0, finish_pool: 0 });
+      setData(result ?? { visites: 0, start_pool: 0, finish_pool: 0 });
       // Ensure result is always an object with default values
       // if (result && typeof result === "object" && "visites" in result) {
       //   setData({
