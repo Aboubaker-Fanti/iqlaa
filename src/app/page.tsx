@@ -26,8 +26,8 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
 useEffect(() => {
   const fetchData = async () => {
     const result = await getIqlaaData();
-    if (result)
-      setData(result);
+    const { visites = 0, start_pool = 0, finish_pool = 0 } = result || {};
+      setData({ visites, start_pool, finish_pool });
     if (!localStorage.getItem("key")){
       localStorage.setItem("key","done");
       if (resutl)
