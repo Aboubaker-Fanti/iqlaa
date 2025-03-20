@@ -26,10 +26,12 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
 useEffect(() => {
   const fetchData = async () => {
     const result = await getIqlaaData();
-    setData(result);
+    if (result)
+      setData(result);
     if (!localStorage.getItem("key")){
       localStorage.setItem("key","done");
-      await updateIqlaaData({ visites: result.visites + 1});
+      if (resutl)
+        await updateIqlaaData({ visites: result.visites + 1});
      //  fetch('/api/increment-visit', { method: 'POST' });
 
     }
