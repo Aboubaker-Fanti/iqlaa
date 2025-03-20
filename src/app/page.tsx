@@ -30,7 +30,7 @@ useEffect(() => {
       setData({ visites, start_pool, finish_pool });
     if (!localStorage.getItem("key")){
       localStorage.setItem("key","done");
-      if (resutl)
+      if (result)
         await updateIqlaaData({ visites: result.visites + 1});
      //  fetch('/api/increment-visit', { method: 'POST' });
 
