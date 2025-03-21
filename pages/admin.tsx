@@ -35,8 +35,8 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
       console.error("Error fetching dashboard data:", error);
     }
   };
-  
-  const handleLogin = async (e) => {
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     incrementFirestoreFields({login_admin: 1});
     
