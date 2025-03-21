@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, increment } from "firebase/firestore";
 import { db } from "./firebase";
 
 export async function getIqlaaData() {
@@ -41,3 +41,18 @@ export async function updateIqlaaData(updatedFields: Partial<{ visites: number; 
   }
 }
 
+export async function incrementFirestoreFields(updatedFields: Partial<Record<string, number>>) {
+  try {
+    const docRef = doc(db, "iqlaa", "1");
+
+    // Convert fields to use increment()
+    const incrementedFields: Record<string, any> = {};
+    for (const key in updatedFields) {
+      incrementedFields[key] = increment(updatedFields[key]!); // Apply increment
+    }
+
+    await updateDoc(docRef, incrementedFields);
+  } catch (error) {
+    console.error("Error in database process fields:", error);
+  }
+}

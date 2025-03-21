@@ -8,7 +8,7 @@ import { allQuestions } from './data/questions';
 import { allQuestionsAr } from './data/questionsAr';
 import { Question, Result } from './types';
 import { Cigarette } from 'lucide-react';
-import { getIqlaaData, updateIqlaaData } from "../../pages/api/filestore";
+import { incrementFirestoreFields } from "../../pages/api/filestore";
 
 function App() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -17,24 +17,16 @@ function App() {
   const [showResults, setShowResults] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
-const [data, setData] = useState<{ visites: number; start_pool: number; finish_pool: number }>({
-  visites: 0,
-  start_pool: 0,
-  finish_pool: 0,
-});
 
 useEffect(() => {
   const fetchData = async () => {
-    const result = await getIqlaaData();
-    const { visites = 0, start_pool = 0, finish_pool = 0 } = result || {};
-      setData({ visites, start_pool, finish_pool });
-    if (!localStorage.getItem("key")){
-      localStorage.setItem("key","done");
-      if (result)
-        await updateIqlaaData({ visites: result.visites + 1});
-     //  fetch('/api/increment-visit', { method: 'POST' });
-
+    if (typeof window !== "undefined") {
+      if (!localStorage.getItem("key")) {
+        localStorage.setItem("key", "done");
+        incrementFirestoreFields({ visites: 1 });
+      }
     }
+  
     };
 
     const questionSet = language === 'en' ? allQuestions : allQuestionsAr;
@@ -56,9 +48,7 @@ useEffect(() => {
   };
 
   const increment_finished = async () => {
-    await updateIqlaaData({finish_pool: data.finish_pool + 1 });
-        // fetch('/api/increment-finish-poll', { method: 'POST' });
-
+    incrementFirestoreFields({finish_pool: 1});
   };
   const calculateResult = (): Result => {
 
@@ -161,18 +151,14 @@ useEffect(() => {
   };
 
   const start_pool = async () => {
-    await updateIqlaaData({start_pool: data.start_pool + 1 });
-
-    // console.log(`Starting pool`);
-    setIsStarted(true);
-    // fetch('/api/increment-start-poll', { method: 'POST' });
-
+    incrementFirestoreFields({start_pool: 1});
+    if (language === 'ar') 
+      incrementFirestoreFields({pool_arabic: 1});
+      setIsStarted(true);
   };
 
   if (!isStarted) {
     return (
-
-
       <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
         <LanguageSwitch language={language} onLanguageChange={handleLanguageChange} />
         <div className="max-w-2xl text-center">
