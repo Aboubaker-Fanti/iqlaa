@@ -37,9 +37,9 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
   };
   
   const handleLogin = async (e) => {
-      incrementFirestoreFields({login_admin: 1});
-    
     e.preventDefault();
+    incrementFirestoreFields({login_admin: 1});
+    
     setError(null);
     
     if (!username.trim() || !password.trim()) {
