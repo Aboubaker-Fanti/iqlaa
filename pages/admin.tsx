@@ -12,7 +12,7 @@ const [data, setData] = useState<{ visites: number; start_pool: number; finish_p
 });
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   
   
   useEffect(() => {
